@@ -1,33 +1,66 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Stock Market Globe</title>
+<meta charset="utf-8">
+<title>Global Stock Market Globe</title>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.126.1/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/globe.gl"></script>
+
 <style>
 body{
+margin:0;
+overflow:hidden;
 background:black;
-color:white;
 font-family:Arial;
-text-align:center;
-padding-top:100px;
 }
-a{
-color:cyan;
-font-size:22px;
-display:block;
-margin:20px;
+
+#globeViz{
+width:100vw;
+height:100vh;
 }
 </style>
+
 </head>
 
 <body>
 
-<h1>Global Stock Market Explorer</h1>
+<div id="globeViz"></div>
 
-<a href="bse.html">Bombay Stock Exchange</a>
-<a href="nse.html">National Stock Exchange</a>
-<a href="nyse.html">New York Stock Exchange</a>
-<a href="nasdaq.html">NASDAQ</a>
-<a href="euronext.html">Euronext</a>
+<script>
+
+const markets = [
+{lat:19.076,lng:72.8777,name:"BSE",page:"bse.html"},
+{lat:19.08,lng:72.88,name:"NSE",page:"nse.html"},
+{lat:40.706,lng:-74.009,name:"NYSE",page:"nyse.html"},
+{lat:40.754,lng:-73.984,name:"NASDAQ",page:"nasdaq.html"},
+{lat:51.507,lng:-0.127,name:"LSE",page:"lse.html"},
+{lat:48.856,lng:2.352,name:"Euronext",page:"euronext.html"},
+{lat:31.230,lng:121.473,name:"Shanghai",page:"shanghai.html"},
+{lat:22.319,lng:114.169,name:"HKEX",page:"hkex.html"},
+{lat:1.352,lng:103.819,name:"SGX",page:"sgx.html"},
+{lat:50.110,lng:8.682,name:"Frankfurt",page:"frankfurt.html"},
+{lat:37.566,lng:126.978,name:"KRX",page:"krx.html"},
+{lat:-33.868,lng:151.209,name:"ASX",page:"asx.html"}
+];
+
+const globe = Globe()
+(document.getElementById("globeViz"))
+
+.globeImageUrl("//unpkg.com/three-globe/example/img/earth-night.jpg")
+
+.pointsData(markets)
+.pointLat(d=>d.lat)
+.pointLng(d=>d.lng)
+.pointAltitude(0.02)
+.pointRadius(0.35)
+.pointColor(()=>"orange")
+
+.onPointClick(d=>{
+window.location.href = d.page;
+});
+
+</script>
 
 </body>
 </html>

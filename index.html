@@ -1,50 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <title>Global Stock Market Globe</title>
+
+<script src="https://unpkg.com/three@0.126.1/build/three.min.js"></script>
+<script src="https://unpkg.com/globe.gl"></script>
 
 <style>
 body{
 margin:0;
 background:black;
-font-family:Arial;
 overflow:hidden;
-color:white;
+font-family:Arial;
 }
 
 #globeViz{
 width:100vw;
 height:100vh;
 }
-
-.marker{
-position:absolute;
-transform:translate(-50%,-50%);
-cursor:pointer;
-text-align:center;
-}
-
-.dot{
-width:8px;
-height:8px;
-background:red;
-border-radius:50%;
-margin:auto;
-}
-
-.label{
-font-size:12px;
-background:rgba(0,0,0,0.7);
-padding:3px 6px;
-border-radius:4px;
-margin-top:3px;
-white-space:nowrap;
-}
 </style>
-
-<script src="https://unpkg.com/three"></script>
-<script src="https://unpkg.com/globe.gl"></script>
 
 </head>
 
@@ -55,52 +30,37 @@ white-space:nowrap;
 <script>
 
 const exchanges = [
+{lat:19.076,lng:72.8777,name:"BSE",page:"bse.html"},
+{lat:19.08,lng:72.88,name:"NSE",page:"nse.html"},
+{lat:40.706,lng:-74.009,name:"NYSE",page:"nyse.html"},
+{lat:40.754,lng:-73.984,name:"NASDAQ",page:"nasdaq.html"},
+{lat:51.507,lng:-0.127,name:"LSE",page:"lse.html"},
+{lat:35.676,lng:139.650,name:"JPX",page:"jse.html"},
+{lat:31.230,lng:121.473,name:"Shanghai",page:"shanghai.html"},
+{lat:22.319,lng:114.169,name:"HKEX",page:"hkex.html"},
+{lat:1.352,lng:103.819,name:"SGX",page:"sgx.html"},
+{lat:48.856,lng:2.352,name:"Euronext",page:"euronext.html"},
+{lat:50.110,lng:8.682,name:"Frankfurt",page:"frankfurt.html"},
+{lat:47.376,lng:8.541,name:"Swiss",page:"swiss.html"},
+{lat:-33.868,lng:151.209,name:"ASX",page:"asx.html"},
+{lat:37.566,lng:126.978,name:"KRX",page:"krx.html"}
+];
 
-{lat:19.0760,lng:72.8777,name:"BSE",file:"bse.html"},
-{lat:19.08,lng:72.88,name:"NSE",file:"nse.html"},
-
-{lat:40.706,lng:-74.009,name:"NYSE",file:"nyse.html"},
-{lat:40.75,lng:-73.99,name:"NASDAQ",file:"nasdaq.html"},
-
-{lat:51.5074,lng:-0.1278,name:"LSE",file:"lse.html"},
-{lat:35.6895,lng:139.6917,name:"JPX",file:"jse.html"},
-{lat:31.2304,lng:121.4737,name:"Shanghai",file:"shanghai.html"},
-{lat:22.3193,lng:114.1694,name:"HKEX",file:"hkex.html"},
-{lat:1.3521,lng:103.8198,name:"SGX",file:"sgx.html"},
-{lat:48.8566,lng:2.3522,name:"Euronext",file:"euronext.html"},
-{lat:50.1109,lng:8.6821,name:"Frankfurt",file:"frankfurt.html"},
-{lat:47.3769,lng:8.5417,name:"Swiss",file:"swiss.html"},
-{lat:-33.8688,lng:151.2093,name:"ASX",file:"asx.html"},
-{lat:37.5665,lng:126.9780,name:"KRX",file:"krx.html"},
-{lat:25.2048,lng:55.2708,name:"Tadawul",file:"tadawul.html"},
-{lat:39.9334,lng:32.8597,name:"Borsa Istanbul",file:"b3.html"}
-
-]
-
-const Globe = new GlobeGL(document.getElementById('globeViz'))
+const globe = Globe()
+(document.getElementById('globeViz'))
 
 .globeImageUrl('//unpkg.com/three-globe/example/img/earth-night.jpg')
-.backgroundColor('black')
 
 .pointsData(exchanges)
-.pointLat(d=>d.lat)
-.pointLng(d=>d.lng)
+.pointLat(d => d.lat)
+.pointLng(d => d.lng)
+.pointColor(() => "red")
 .pointAltitude(0.02)
 .pointRadius(0.3)
-.pointColor(()=>'red')
 
-.labelsData(exchanges)
-.labelLat(d=>d.lat)
-.labelLng(d=>d.lng)
-.labelText(d=>d.name)
-.labelSize(1.2)
-.labelDotRadius(0.3)
-.labelColor(()=>'white')
-.labelResolution(2)
-
-.onLabelClick(d=>{
-window.location.href=d.file
-})
+.onPointClick(d => {
+window.location.href = d.page;
+});
 
 </script>
 

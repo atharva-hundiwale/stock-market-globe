@@ -1,64 +1,194 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="utf-8">
-<title>Global Stock Market Globe</title>
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.126.1/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/globe.gl"></script>
+<head>
+<meta charset="UTF-8">
+<title>Global Stock Market Explorer</title>
+
+<script src="https://unpkg.com/globe.gl"></script>
 
 <style>
+
 body{
 margin:0;
 overflow:hidden;
-background:black;
 font-family:Arial;
+background:black;
 }
 
 #globeViz{
-width:100vw;
-height:100vh;
+position:absolute;
+top:0;
+width:100%;
+height:100%;
 }
-</style>
 
+.hero{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+text-align:center;
+color:white;
+z-index:10;
+}
+
+.hero h1{
+font-size:60px;
+margin-bottom:10px;
+}
+
+.hero p{
+font-size:20px;
+margin-bottom:20px;
+}
+
+.hero button{
+padding:15px 30px;
+font-size:18px;
+border:none;
+border-radius:8px;
+background:#00ffcc;
+cursor:pointer;
+}
+
+.marker{
+display:flex;
+flex-direction:column;
+align-items:center;
+cursor:pointer;
+pointer-events:auto;
+}
+
+.marker.bottom{
+flex-direction:column-reverse;
+}
+
+.pin{
+width:8px;
+height:8px;
+background:red;
+border-radius:50%;
+box-shadow:0 0 8px red;
+}
+
+.label{
+color:white;
+font-size:11px;
+background:rgba(0,0,0,0.6);
+padding:2px 6px;
+border-radius:4px;
+white-space:nowrap;
+margin:3px;
+}
+
+</style>
 </head>
 
 <body>
 
 <div id="globeViz"></div>
 
+<div class="hero" id="heroSection">
+<h1>Global Stock Market</h1>
+<p>Learn • Trade • Simulate</p>
+<button onclick="startLearning()">Start Learning</button>
+</div>
+
 <script>
 
+const globe = Globe()
+(document.getElementById('globeViz'))
+.globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
+.bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png');
+
+globe.controls().autoRotate = false;
+
+
+// STOCK MARKETS
+
 const markets = [
-{lat:19.076,lng:72.8777,name:"BSE",page:"bse.html"},
-{lat:19.08,lng:72.88,name:"NSE",page:"nse.html"},
-{lat:40.706,lng:-74.009,name:"NYSE",page:"nyse.html"},
-{lat:40.754,lng:-73.984,name:"NASDAQ",page:"nasdaq.html"},
-{lat:51.507,lng:-0.127,name:"LSE",page:"lse.html"},
-{lat:48.856,lng:2.352,name:"Euronext",page:"euronext.html"},
-{lat:31.230,lng:121.473,name:"Shanghai",page:"shanghai.html"},
-{lat:22.319,lng:114.169,name:"HKEX",page:"hkex.html"},
-{lat:1.352,lng:103.819,name:"SGX",page:"sgx.html"},
-{lat:50.110,lng:8.682,name:"Frankfurt",page:"frankfurt.html"},
-{lat:37.566,lng:126.978,name:"KRX",page:"krx.html"},
-{lat:-33.868,lng:151.209,name:"ASX",page:"asx.html"}
+
+{ lat:19.0760, lng:72.8777, name:"NSE - Mumbai", url:"stock-markets/nse.html", position:"top" },
+{ lat:19.0830, lng:72.8650, name:"BSE - Mumbai", url:"stock-markets/bse.html", position:"bottom" },
+
+{ lat:40.7069, lng:-74.0113, name:"NYSE - New York", url:"stock-markets/nyse.html", position:"top" },
+{ lat:40.7090, lng:-74.0050, name:"NASDAQ - New York", url:"stock-markets/nasdaq.html", position:"bottom" },
+
+{ lat:35.6828, lng:139.759, name:"Tokyo Stock Exchange", url:"stock-markets/tokyo.html", position:"top" },
+
+{ lat:51.5155, lng:-0.0922, name:"London Stock Exchange", url:"stock-markets/lse.html", position:"bottom" },
+
+{ lat:31.2400, lng:121.4900, name:"Shanghai Exchange", url:"stock-markets/shanghai.html", position:"top" },
+
+{ lat:22.2800, lng:114.1588, name:"Hong Kong Exchange", url:"stock-markets/hkex.html", position:"bottom" },
+
+{ lat:48.8566, lng:2.3522, name:"Euronext Paris", url:"stock-markets/euronext.html", position:"top" },
+
+{ lat:50.1109, lng:8.6821, name:"Frankfurt Exchange", url:"stock-markets/frankfurt.html", position:"bottom" },
+
+{ lat:43.6532, lng:-79.3832, name:"Toronto Exchange", url:"stock-markets/tsx.html", position:"top" },
+
+{ lat:-33.8688, lng:151.2093, name:"ASX Sydney", url:"stock-markets/asx.html", position:"bottom" },
+
+{ lat:37.5665, lng:126.9780, name:"Korea Exchange", url:"stock-markets/krx.html", position:"top" },
+
+{ lat:47.3769, lng:8.5417, name:"Swiss Exchange", url:"stock-markets/swiss.html", position:"bottom" },
+
+{ lat:25.0330, lng:121.5654, name:"Taiwan Exchange", url:"stock-markets/twse.html", position:"top" },
+
+{ lat:24.7136, lng:46.6753, name:"Saudi Tadawul", url:"stock-markets/tadawul.html", position:"bottom" },
+
+{ lat:-23.5505, lng:-46.6333, name:"B3 Brazil", url:"stock-markets/b3.html", position:"top" },
+
+{ lat:-26.2041, lng:28.0473, name:"Johannesburg Exchange", url:"stock-markets/jse.html", position:"bottom" },
+
+{ lat:1.3521, lng:103.8198, name:"Singapore Exchange", url:"stock-markets/sgx.html", position:"top" }
+
 ];
 
-const globe = Globe()
-(document.getElementById("globeViz"))
 
-.globeImageUrl("//unpkg.com/three-globe/example/img/earth-night.jpg")
+// ADD MARKERS
 
-.pointsData(markets)
-.pointLat(d=>d.lat)
-.pointLng(d=>d.lng)
-.pointAltitude(0.02)
-.pointRadius(0.35)
-.pointColor(()=>"orange")
+function addMarkers(){
 
-.onPointClick(d=>{
-window.location.href = d.page;
+globe.htmlElementsData(markets)
+.htmlElement(d => {
+
+const el = document.createElement("div");
+
+el.className = "marker";
+
+if(d.position === "bottom"){
+el.classList.add("bottom");
+}
+
+el.innerHTML = `
+<div class="label">${d.name}</div>
+<div class="pin"></div>
+`;
+
+el.onclick = (e)=>{
+e.stopPropagation();
+window.location.href = d.url;
+};
+
+return el;
+
 });
+
+}
+
+
+// START BUTTON
+
+function startLearning(){
+
+document.getElementById("heroSection").style.display="none";
+
+addMarkers();
+
+}
 
 </script>
 

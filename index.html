@@ -1,68 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>Global Stock Market Globe</title>
-
-<script src="https://unpkg.com/three@0.126.1/build/three.min.js"></script>
-<script src="https://unpkg.com/globe.gl"></script>
-
+<title>Stock Market Globe</title>
 <style>
 body{
-margin:0;
 background:black;
-overflow:hidden;
+color:white;
 font-family:Arial;
+text-align:center;
+padding-top:100px;
 }
-
-#globeViz{
-width:100vw;
-height:100vh;
+a{
+color:cyan;
+font-size:22px;
+display:block;
+margin:20px;
 }
 </style>
-
 </head>
 
 <body>
 
-<div id="globeViz"></div>
+<h1>Global Stock Market Explorer</h1>
 
-<script>
-
-const exchanges = [
-{lat:19.076,lng:72.8777,name:"BSE",page:"bse.html"},
-{lat:19.08,lng:72.88,name:"NSE",page:"nse.html"},
-{lat:40.706,lng:-74.009,name:"NYSE",page:"nyse.html"},
-{lat:40.754,lng:-73.984,name:"NASDAQ",page:"nasdaq.html"},
-{lat:51.507,lng:-0.127,name:"LSE",page:"lse.html"},
-{lat:35.676,lng:139.650,name:"JPX",page:"jse.html"},
-{lat:31.230,lng:121.473,name:"Shanghai",page:"shanghai.html"},
-{lat:22.319,lng:114.169,name:"HKEX",page:"hkex.html"},
-{lat:1.352,lng:103.819,name:"SGX",page:"sgx.html"},
-{lat:48.856,lng:2.352,name:"Euronext",page:"euronext.html"},
-{lat:50.110,lng:8.682,name:"Frankfurt",page:"frankfurt.html"},
-{lat:47.376,lng:8.541,name:"Swiss",page:"swiss.html"},
-{lat:-33.868,lng:151.209,name:"ASX",page:"asx.html"},
-{lat:37.566,lng:126.978,name:"KRX",page:"krx.html"}
-];
-
-const globe = Globe()
-(document.getElementById('globeViz'))
-
-.globeImageUrl('//unpkg.com/three-globe/example/img/earth-night.jpg')
-
-.pointsData(exchanges)
-.pointLat(d => d.lat)
-.pointLng(d => d.lng)
-.pointColor(() => "red")
-.pointAltitude(0.02)
-.pointRadius(0.3)
-
-.onPointClick(d => {
-window.location.href = d.page;
-});
-
-</script>
+<a href="bse.html">Bombay Stock Exchange</a>
+<a href="nse.html">National Stock Exchange</a>
+<a href="nyse.html">New York Stock Exchange</a>
+<a href="nasdaq.html">NASDAQ</a>
+<a href="euronext.html">Euronext</a>
 
 </body>
 </html>
